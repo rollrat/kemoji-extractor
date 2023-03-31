@@ -9,14 +9,35 @@
 #include <sstream>
 #include <stdio.h>
 #include <string>
+#include <tlhelp32.h>
+
+DWORD FindProcessByName(const wchar_t *szProcess) {
+  HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+  PROCESSENTRY32 ProcessEntry32;
+
+  if (hSnapshot) {
+    ProcessEntry32.dwSize = sizeof(PROCESSENTRY32);
+
+    while (Process32Next(hSnapshot, &ProcessEntry32)) {
+      if (wcscmp(ProcessEntry32.szExeFile, szProcess) == 0)
+        return ProcessEntry32.th32ProcessID;
+    }
+    CloseHandle(hSnapshot);
+  }
+  return 0;
+}
 
 int main() {
   DWORD *Result = 0;
   DWORD pid, value, count;
 
+#if 0
   printf("Process Pid : ");
   scanf_s("%d", &pid);
-
+#else
+  pid = FindProcessByName(L"^_^.exe");
+#endif
+  
   constexpr int riff_magic = 0x46464952;
   constexpr int webp_magic = 0x50424557;
   constexpr int mem_buffer_sz = 0x8000;
