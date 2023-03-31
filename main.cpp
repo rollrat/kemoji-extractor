@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
+// origin: https://github.com/cloudchamb3r/moji-dump-osx/blob/main/dump.cpp
+
 #include <Windows.h>
 #include <fstream>
 #include <iostream>
